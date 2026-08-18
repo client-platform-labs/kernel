@@ -1,4 +1,10 @@
-import { createCli, doctor, loadPlugins, loadWorkspaceConfig } from "@client-platform/kernel";
+import {
+  ConfigError,
+  createCli,
+  doctor,
+  loadPlugins,
+  loadWorkspaceConfig,
+} from "@client-platform/kernel";
 
 export async function run(argv: string[]): Promise<void> {
   const program = createCli({
@@ -15,45 +21,80 @@ export async function run(argv: string[]): Promise<void> {
       for (const finding of findings) {
         console.log(`[${finding.severity}] ${finding.code}: ${finding.message}`);
       }
+      if (findings.some((f) => f.severity === "error")) {
+        process.exitCode = 1;
+      }
     });
 
   const config = program.command("config").description("Workspace config helpers");
   config
     .command("show")
-    .description("Show normalized workspace config (stub)")
+    .description("Show normalized workspace config")
     .action(async () => {
-      const cfg = await loadWorkspaceConfig(process.cwd());
-      console.log(JSON.stringify(cfg, null, 2));
+      try {
+        const cfg = await loadWorkspaceConfig(process.cwd());
+        console.log(JSON.stringify(cfg, null, 2));
+      } catch (err) {
+        const message = err instanceof ConfigError || err instanceof Error ? err.message : String(err);
+        console.error(message);
+        process.exitCode = 1;
+      }
     });
   config
     .command("validate")
-    .description("Validate workspace config (stub)")
+    .description("Validate workspace config")
     .action(async () => {
-      await loadWorkspaceConfig(process.cwd());
-      console.log("config validate: stub ok");
+      try {
+        const cfg = await loadWorkspaceConfig(process.cwd());
+        console.log(`config validate: ok (schemaVersion=${cfg.schemaVersion})`);
+      } catch (err) {
+        const message = err instanceof ConfigError || err instanceof Error ? err.message : String(err);
+        console.error(`config validate: failed — ${message}`);
+        process.exitCode = 1;
+      }
     });
 
   const plugin = program.command("plugin").description("Installed product/plugin helpers");
   plugin
     .command("list")
-    .description("List discovered plugins (stub)")
+    .description("List discovered plugins")
     .action(async () => {
-      const cfg = await loadWorkspaceConfig(process.cwd());
-      const plugins = await loadPlugins(cfg);
-      if (plugins.length === 0) {
-        console.log("(no plugins discovered — stub)");
-        return;
-      }
-      for (const p of plugins) {
-        console.log(`${p.name}${p.version ? `@${p.version}` : ""}`);
+      try {
+        const cfg = await loadWorkspaceConfig(process.cwd());
+        const plugins = await loadPlugins(cfg);
+        if (plugins.length === 0) {
+          console.log("(no plugins discovered)");
+          return;
+        }
+        for (const p of plugins) {
+          console.log(`${p.name}${p.version ? `@${p.version}` : ""}`);
+        }
+      } catch (err) {
+        const message = err instanceof ConfigError || err instanceof Error ? err.message : String(err);
+        console.error(message);
+        process.exitCode = 1;
       }
     });
   plugin
     .command("info")
     .argument("<name>", "plugin package name")
-    .description("Show plugin metadata (stub)")
+    .description("Show plugin metadata")
     .action(async (name: string) => {
-      console.log(`plugin info: ${name} (stub)`);
+      try {
+        const cfg = await loadWorkspaceConfig(process.cwd());
+        const plugins = await loadPlugins(cfg);
+        const match = plugins.find((p) => p.name === name);
+        if (!match) {
+          console.error(`plugin not found: ${name}`);
+          process.exitCode = 1;
+          return;
+        }
+        console.log(JSON.stringify(match, null, 2));
+      } catch (err) {
+        const message = err instanceof ConfigError || err instanceof Error ? err.message : String(err);
+        console.error(message);
+        process.exitCode = 1;
+      }
     });
 
   program

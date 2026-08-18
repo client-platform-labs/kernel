@@ -1,0 +1,28 @@
+{
+  "name": "@client-platform/cli",
+  "version": "0.0.0",
+  "description": "Umbrella CLI for Client Platform Labs",
+  "type": "module",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "bin": {
+    "client-platform": "./bin/client-platform.js"
+  },
+  "files": [
+    "bin",
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@client-platform/kernel": "0.0.0",
+    "commander": "^13.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "typescript": "^5.9.2"
+  }
+}

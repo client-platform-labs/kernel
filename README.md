@@ -35,3 +35,19 @@ Out:
 - [Roadmap](./ROADMAP.md)
 - [Architecture](./docs/architecture.md)
 - [ADR 0001: shared kernel boundaries](./docs/adr/0001-shared-kernel-boundaries.md)
+
+## Local development
+
+Requires Node.js 24.x LTS (`engines.node >=24.0.0`).
+
+```bash
+npm install
+npm run build
+node packages/cli/bin/client-platform.js --help
+node packages/cli/bin/client-platform.js doctor
+```
+
+Workspace packages:
+
+- `packages/kernel` → `@client-platform/kernel`
+- `packages/cli` → `@client-platform/cli` (bin `client-platform`)

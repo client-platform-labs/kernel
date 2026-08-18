@@ -1,0 +1,26 @@
+# Roadmap
+
+## Now
+
+- Keep this charter aligned with family decisions.
+- Freeze the public kernel API names: `createCli`, `loadWorkspaceConfig`, `loadProjectManifest`, `discoverProjects`, `loadPlugins`, `doctor`.
+- Freeze the Umbrella CLI name: `client-platform`.
+
+## Next
+
+- Scaffold the kernel monorepo: `packages/kernel` and `packages/cli`.
+- Implement config/manifest load-migrate-validate against JSON Schema 2020-12.
+- Implement plugin discovery from `package.json#clientPlatform`.
+- Ship `client-platform doctor` as the first Umbrella command.
+
+## Later
+
+- Product command delegation: `client-platform <product> …`.
+- Versioned schema migrations and compatibility checks against Product plugins.
+- Optional Node SEA distribution; npm `bin` remains default.
+
+## Non-goals for v1
+
+- Hosting Product runtimes inside this repository.
+- A plugin marketplace.
+- Supporting Node versions below 24.x LTS.

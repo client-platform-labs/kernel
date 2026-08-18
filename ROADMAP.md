@@ -3,19 +3,19 @@
 ## Now
 
 - Keep this charter aligned with family decisions.
-- Freeze the public kernel API names: `createCli`, `loadWorkspaceConfig`, `loadProjectManifest`, `discoverProjects`, `loadPlugins`, `doctor`.
-- Freeze the Umbrella CLI name: `client-platform`.
+- Public kernel API: `createCli`, `loadWorkspaceConfig`, `loadProjectManifest`, `discoverProjects`, `loadPlugins`, `doctor`.
+- Umbrella CLI v1 commands: `doctor`, `config show|validate`, `plugin list|info`, lazy product delegation.
 
 ## Next
 
 - Scaffold the kernel monorepo: `packages/kernel` and `packages/cli`.
 - Implement config/manifest load-migrate-validate against JSON Schema 2020-12.
 - Implement plugin discovery from `package.json#clientPlatform`.
-- Ship `client-platform doctor` as the first Umbrella command.
+- Ship the Umbrella v1 command surface above.
 
 ## Later
 
-- Product command delegation: `client-platform <product> …`.
+- `plugin install|update` and umbrella `init`.
 - Versioned schema migrations and compatibility checks against Product plugins.
 - Optional Node SEA distribution; npm `bin` remains default.
 
@@ -24,3 +24,4 @@
 - Hosting Product runtimes inside this repository.
 - A plugin marketplace.
 - Supporting Node versions below 24.x LTS.
+- Interactive family-wide scaffolding in the Umbrella CLI.
